@@ -159,11 +159,13 @@ app.get('/oembed', async function recordCondition(req: express.Request, res: exp
 })
 
 app.get('/condition/ui', async function recordCondition(req: express.Request, res: express.Response) {
-    const url = req.protocol + '://' + req.get('host') + req.originalUrl;
+    const baseUrl = `${req.protocol}://${req.get('host')}/api`
+    const oembedUrl = `${baseUrl}/oembed`;
+    const targetUrl = `${baseUrl}/${req.originalUrl}`;
     const contents = `<html>
     <head>
-        <link rel="alternate" type="application/json+oembed" href="${req.baseUrl}/oembed?${querystring.stringify({url: url, format: 'json'})}" title="Current Conditions" />
-        <link rel="alternate" type="text/xml+oembed" href="${req.baseUrl}/oembed?${querystring.stringify({url: url, format: 'xml'})}" title="Current Conditions" />
+        <link rel="alternate" type="application/json+oembed" href="${oembedUrl}?${querystring.stringify({url: targetUrl, format: 'json'})}" title="Current Conditions" />
+        <link rel="alternate" type="text/xml+oembed" href="${oembedUrl}?${querystring.stringify({url: targetUrl, format: 'xml'})}" title="Current Conditions" />
     </head>
     <body>
         ${await getCurrentConditionsHtml()}
